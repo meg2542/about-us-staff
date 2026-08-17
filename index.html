@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#0b1220" />
+  <title>ABOUT US STAFF</title>
+  <style>
+    :root{--bg:#f4f7fb;--card:#fff;--ink:#101828;--muted:#667085;--line:#e4e7ec;--blue:#2563eb;--green:#16a34a;--red:#dc2626;--amber:#d97706;--navy:#0b1220}
+    *{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,"Noto Sans Thai",sans-serif;background:var(--bg);color:var(--ink)}
+    .wrap{max-width:520px;margin:auto;min-height:100vh;padding:18px 16px 32px}.top{display:flex;justify-content:space-between;align-items:center;margin:4px 0 18px}.brand{font-weight:900;letter-spacing:.3px}.pill{font-size:12px;padding:6px 10px;border-radius:999px;background:#eaf0ff;color:#2446a8}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:18px;box-shadow:0 8px 28px rgba(16,24,40,.06);margin-bottom:14px}.hero{background:linear-gradient(135deg,#0b1220,#1f3b7a);color:#fff;border:0}.hello{font-size:14px;opacity:.8}.name{font-size:30px;font-weight:900;margin:2px 0 12px}.shift{display:flex;justify-content:space-between;align-items:end}.shift b{font-size:20px}
+    .status{display:flex;gap:10px;align-items:center;padding:13px;border-radius:14px;background:#f8fafc;margin:10px 0}.dot{width:11px;height:11px;border-radius:50%;background:#98a2b3}.ok .dot{background:var(--green)}.bad .dot{background:var(--red)}.warn .dot{background:var(--amber)}.status strong{display:block}.status small{color:var(--muted)}
+    .actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}.btn{border:0;border-radius:16px;padding:16px;font-size:18px;font-weight:900;cursor:pointer}.in{background:var(--green);color:white}.out{background:var(--red);color:white}.btn:disabled{opacity:.4;cursor:not-allowed}.secondary{width:100%;padding:12px;border:1px solid var(--line);background:#fff;border-radius:12px;font-weight:700}
+    .times{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}.timebox{background:#f8fafc;border-radius:14px;padding:12px 6px}.timebox small{display:block;color:var(--muted)}.timebox b{font-size:18px}.login{margin-top:9vh}.login h1{font-size:30px;margin:0 0 6px}.login p{color:var(--muted);margin:0 0 22px}.field{margin:12px 0}.field label{display:block;font-size:13px;font-weight:800;margin-bottom:6px}.field input{width:100%;padding:14px;border:1px solid #d0d5dd;border-radius:13px;font-size:18px}.loginBtn{width:100%;margin-top:8px;background:var(--blue);color:white}.msg{padding:12px;border-radius:12px;margin:12px 0;font-size:14px;display:none}.msg.show{display:block}.msg.error{background:#fff0f0;color:#b42318}.msg.info{background:#eff6ff;color:#1d4ed8}.tiny{font-size:12px;color:var(--muted);text-align:center;margin-top:14px}.logout{background:none;border:0;color:#cbd5e1;font-size:13px}.hidden{display:none!important}.spinner{display:inline-block;width:14px;height:14px;border:2px solid #ffffff55;border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite;vertical-align:-2px;margin-right:6px}@keyframes spin{to{transform:rotate(360deg)}}
+    .toast{position:fixed;left:16px;right:16px;bottom:20px;max-width:480px;margin:auto;background:#111827;color:white;padding:14px;border-radius:14px;display:none;z-index:10}.toast.show{display:block}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <section id="loginView" class="login">
+    <div class="brand">ABOUT US STAFF</div>
+    <h1>เข้าสู่ระบบ</h1>
+    <p>Login ครั้งแรกเพื่อผูกมือถือกับบัญชีพนักงาน</p>
+    <div class="card">
+      <div class="field"><label>รหัสพนักงาน</label><input id="employeeId" autocomplete="username" placeholder="เช่น E001"></div>
+      <div class="field"><label>PIN</label><input id="pin" type="password" inputmode="numeric" autocomplete="current-password" placeholder="4-8 หลัก"></div>
+      <div id="loginMsg" class="msg"></div>
+      <button id="loginBtn" class="btn loginBtn" onclick="login()">เข้าสู่ระบบ</button>
+    </div>
+    <div class="tiny">ครั้งแรก Admin ต้องอนุมัติเครื่องนี้ก่อนใช้งาน</div>
+  </section>
+
+  <section id="homeView" class="hidden">
+    <div class="top"><div class="brand">ABOUT US STAFF</div><button class="logout" onclick="logout()">ออกจากระบบ</button></div>
+    <div class="card hero">
+      <div class="hello">สวัสดี</div><div class="name" id="empName">-</div>
+      <div class="shift"><div><small>กะวันนี้</small><br><b id="shiftTime">--:-- - --:--</b></div><div class="pill" id="shiftDate">-</div></div>
+    </div>
+    <div class="card">
+      <div id="gpsStatus" class="status warn"><span class="dot"></span><div><strong>กำลังตรวจ GPS</strong><small>กรุณาอนุญาตตำแหน่ง</small></div></div>
+      <div id="deviceStatus" class="status ok"><span class="dot"></span><div><strong>อุปกรณ์ได้รับอนุญาต</strong><small id="deviceLabel">มือถือเครื่องนี้</small></div></div>
+      <button class="secondary" onclick="refreshLocation()">ตรวจตำแหน่งอีกครั้ง</button>
+    </div>
+    <div class="card">
+      <div class="actions"><button id="clockInBtn" class="btn in" onclick="clock('IN')">เข้างาน</button><button id="clockOutBtn" class="btn out" onclick="clock('OUT')">ออกงาน</button></div>
+    </div>
+    <div class="card">
+      <div class="times"><div class="timebox"><small>เข้า</small><b id="clockIn">--:--</b></div><div class="timebox"><small>ออก</small><b id="clockOut">--:--</b></div><div class="timebox"><small>เวลาทำงาน</small><b id="workTime">0:00</b></div></div>
+    </div>
+  </section>
+</div>
+<div id="toast" class="toast"></div>
+<script src="config.js"></script>
+<script>
+const CFG=window.ABOUT_US_STAFF_CONFIG||{};let token=localStorage.getItem('aus_staff_token')||'';let currentStatus=null;let lastLoc=null;
+const deviceId=localStorage.getItem('aus_device_id')||(()=>{const v=(crypto.randomUUID?crypto.randomUUID():Date.now()+'-'+Math.random());localStorage.setItem('aus_device_id',v);return v})();
+function deviceLabel(){return [navigator.platform||'',navigator.userAgent.includes('iPhone')?'iPhone':navigator.userAgent.includes('Android')?'Android':'Browser'].filter(Boolean).join(' / ').slice(0,100)}
+function apiReady(){return CFG.API_URL&&CFG.API_URL.startsWith('https://script.google.com/');}
+async function rpc(action,payload={}){if(!apiReady())throw new Error('ยังไม่ได้ตั้ง API_URL ใน config.js');const requestId=(crypto.randomUUID?crypto.randomUUID():Date.now()+'x'+Math.random()).replace(/[^a-zA-Z0-9-]/g,'');
+  fetch(CFG.API_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=UTF-8'},body:JSON.stringify({requestId,action,payload})}).catch(()=>{});
+  for(let i=0;i<24;i++){await sleep(300+i*35);const res=await jsonpPoll(requestId);if(res&&res.pending)continue;if(!res)continue;if(!res.ok)throw new Error(res.error||'เกิดข้อผิดพลาด');return res.data;}throw new Error('Server ตอบช้า กรุณาลองใหม่');}
+function jsonpPoll(requestId){return new Promise((resolve,reject)=>{const cb='cb_'+Math.random().toString(36).slice(2);const s=document.createElement('script');const timer=setTimeout(()=>{cleanup();resolve(null)},3500);function cleanup(){clearTimeout(timer);delete window[cb];s.remove()}window[cb]=r=>{cleanup();resolve(r)};s.onerror=()=>{cleanup();resolve(null)};s.src=CFG.API_URL+'?action=poll&requestId='+encodeURIComponent(requestId)+'&callback='+cb+'&_='+Date.now();document.head.appendChild(s);});}
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+function showLoginMsg(text,type='info'){const el=document.getElementById('loginMsg');el.className='msg show '+type;el.textContent=text}
+function toast(text){const el=document.getElementById('toast');el.textContent=text;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2800)}
+function setBusy(btn,busy,label){if(!btn)return;btn.disabled=busy;if(busy){btn.dataset.old=btn.innerHTML;btn.innerHTML='<span class="spinner"></span>'+label}else if(btn.dataset.old)btn.innerHTML=btn.dataset.old}
+async function login(){const btn=document.getElementById('loginBtn');setBusy(btn,true,'กำลังเข้าสู่ระบบ');try{const employeeId=document.getElementById('employeeId').value.trim();const pin=document.getElementById('pin').value;const r=await rpc('staffLogin',{employeeId,pin,deviceId,deviceLabel:deviceLabel()});if(r.status==='OK'){token=r.token;localStorage.setItem('aus_staff_token',token);document.getElementById('pin').value='';await boot()}else{showLoginMsg(r.message||'รอ Admin อนุมัติ','info')}}catch(e){showLoginMsg(e.message,'error')}finally{setBusy(btn,false)}}
+function logout(){localStorage.removeItem('aus_staff_token');token='';location.reload()}
+async function boot(){if(!token){show('loginView');return}try{currentStatus=await rpc('staffStatus',{token});show('homeView');renderStatus(currentStatus);refreshLocation()}catch(e){localStorage.removeItem('aus_staff_token');token='';show('loginView');showLoginMsg(e.message,'error')}}
+function show(id){document.getElementById('loginView').classList.toggle('hidden',id!=='loginView');document.getElementById('homeView').classList.toggle('hidden',id!=='homeView')}
+function renderStatus(s){document.getElementById('empName').textContent=s.employee.name;document.getElementById('shiftDate').textContent=s.shiftKey;const sc=s.schedule||{};document.getElementById('shiftTime').textContent=(sc.startTime||s.employee.defaultStart)+' - '+(sc.endTime||s.employee.defaultEnd);document.getElementById('deviceLabel').textContent=s.employee.deviceLabel||deviceLabel();const a=s.attendance||{};document.getElementById('clockIn').textContent=a.clockIn||'--:--';document.getElementById('clockOut').textContent=a.clockOut||'--:--';document.getElementById('workTime').textContent=mins(a.workMinutes||0);document.getElementById('clockInBtn').disabled=!!a.clockIn;document.getElementById('clockOutBtn').disabled=!a.clockIn||!!a.clockOut;}
+function mins(m){m=Number(m||0);return Math.floor(m/60)+':'+String(m%60).padStart(2,'0')}
+function getGeo(){return new Promise((resolve,reject)=>{if(!navigator.geolocation)return reject(new Error('มือถือไม่รองรับ GPS'));navigator.geolocation.getCurrentPosition(p=>resolve({lat:p.coords.latitude,lng:p.coords.longitude,accuracy:p.coords.accuracy}),err=>reject(new Error(err.code===1?'กรุณาอนุญาต Location ให้เว็บไซต์':'อ่าน GPS ไม่สำเร็จ กรุณาลองใหม่')),{enableHighAccuracy:true,timeout:15000,maximumAge:3000})})}
+async function refreshLocation(){const el=document.getElementById('gpsStatus');el.className='status warn';el.innerHTML='<span class="dot"></span><div><strong>กำลังตรวจ GPS</strong><small>กำลังหาตำแหน่งที่แม่นที่สุด</small></div>';try{lastLoc=await getGeo();const r=await rpc('staffLocationCheck',{token,location:lastLoc});if(r.inside&&r.accuracyOk){el.className='status ok';el.innerHTML='<span class="dot"></span><div><strong>อยู่ในพื้นที่ร้าน</strong><small>ห่าง '+Math.round(r.distanceM)+' ม. • ความแม่นยำ ±'+Math.round(r.accuracyM)+' ม.</small></div>'}else if(!r.accuracyOk){el.className='status warn';el.innerHTML='<span class="dot"></span><div><strong>GPS ยังไม่แม่นพอ</strong><small>±'+Math.round(r.accuracyM)+' ม. ต้องไม่เกิน '+r.maxAccuracyM+' ม.</small></div>'}else{el.className='status bad';el.innerHTML='<span class="dot"></span><div><strong>อยู่นอกพื้นที่</strong><small>ห่าง '+Math.round(r.distanceM)+' ม. • อนุญาตไม่เกิน '+r.radiusM+' ม.</small></div>'}}catch(e){el.className='status bad';el.innerHTML='<span class="dot"></span><div><strong>ตรวจ GPS ไม่สำเร็จ</strong><small>'+e.message+'</small></div>'}}
+async function clock(mode){const btn=document.getElementById(mode==='IN'?'clockInBtn':'clockOutBtn');setBusy(btn,true,'กำลังตรวจ');try{const loc=await getGeo();const r=await rpc(mode==='IN'?'clockIn':'clockOut',{token,location:loc});toast((mode==='IN'?'เข้างาน ':'ออกงาน ')+r.time+' สำเร็จ');currentStatus=await rpc('staffStatus',{token});renderStatus(currentStatus);refreshLocation()}catch(e){toast(e.message)}finally{setBusy(btn,false)}}
+boot();
+</script>
+</body>
+</html>
